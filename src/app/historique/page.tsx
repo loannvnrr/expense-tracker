@@ -52,7 +52,7 @@ export default async function Historique({
               <strong style={{ fontSize: 15 }}>{formatEUR(Number(e.amount))}</strong>
             </div>
             <div style={{ fontSize: 12, color: "#71717a", marginTop: 2 }}>
-              {new Date(e.occurredAt).toLocaleString("fr-FR", { dateStyle: "medium", timeStyle: "short" })}
+              {new Date(e.occurredAt).toLocaleString("fr-FR", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Paris" })}
               {e.card && <> · {e.card}</>}
               {e.source === "manuel" && " · saisie manuelle"}
             </div>
