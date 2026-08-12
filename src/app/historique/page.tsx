@@ -9,9 +9,10 @@ function formatEUR(n: number) {
 export default async function Historique({
   searchParams,
 }: {
-  searchParams: { merchant?: string };
+  searchParams: Promise<{ merchant?: string }>;
 }) {
-  const rows = await listExpenses({ merchant: searchParams.merchant });
+  const params = await searchParams;
+  const rows = await listExpenses({ merchant: params.merchant });
 
   return (
     <main style={{ fontFamily: "system-ui", padding: "1.25rem", maxWidth: 640, margin: "0 auto" }}>
@@ -26,7 +27,7 @@ export default async function Historique({
         <input
           name="merchant"
           placeholder="Rechercher un commerçant..."
-          defaultValue={searchParams.merchant}
+          defaultValue={params.merchant}
           style={{ flex: 1, padding: "0.5rem 0.75rem", borderRadius: 8, border: "1px solid #ddd" }}
         />
         <button
