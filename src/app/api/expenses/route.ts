@@ -10,7 +10,6 @@ const payloadSchema = z.object({
   amount: z.number().positive(),
   currency: z.string().length(3).default("EUR"),
   merchant: z.string().nullable().optional(),
-  // Accepte ISO 8601 avec ou sans offset (ce qu'envoie le raccourci)
   occurredAt: z.string().min(1),
   category: z.string().optional(),
   paymentMethod: z.string().default("apple_pay"),
@@ -30,7 +29,22 @@ export async function POST(req: NextRequest) {
     );
   }
   if (authHeader !== `Bearer ${expectedKey}`) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    // --- BLOC DE DEBUG TEMPORAIRE, À RETIRER UNE FOIS LE PROBLÈME RÉSOLU ---
+    return NextResponse.json(
+      {
+        error: "unauthorized",
+        debug: {
+          receivedLength: authHeader?.length ?? 0,
+          receivedStart: authHeader?.slice(0, 12) ?? null,
+          receivedEnd: authHeader?.slice(-6) ?? null,
+          expectedLength: expectedKey?.length ?? 0,
+          expectedStart: expectedKey?.slice(0, 4) ?? null,
+          expectedEnd: expectedKey?.slice(-4) ?? null,
+        },
+      },
+      { status: 401 }
+    );
+    // --- FIN BLOC DE DEBUG ---
   }
 
   // 2. Parsing + validation du payload
